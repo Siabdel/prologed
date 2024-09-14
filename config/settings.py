@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     #'crispy_bootstrap5',  # Si vous utilisez Bootstrap 5
     "crispy_bootstrap4",
     "django_extensions",
+    # local
+    'logyapp',
 ]
 
 MIDDLEWARE = [
