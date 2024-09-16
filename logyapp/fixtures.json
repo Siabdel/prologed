@@ -1,0 +1,118 @@
+[
+  {
+    "model": "logyapp.property",
+    "pk": 1,
+    "fields": {
+      "name": "Appartement Vue sur Mer",
+      "type": "Appartement",
+      "address": "123 Rue de la Plage, 06000 Nice",
+      "owner": 1
+    }
+  },
+  {
+    "model": "logyapp.property",
+    "pk": 2,
+    "fields": {
+      "name": "Villa Provençale",
+      "type": "Maison",
+      "address": "45 Chemin des Oliviers, 13100 Aix-en-Provence",
+      "owner": 1
+    }
+  },
+  {
+    "model": "logyapp.reservation",
+    "pk": 1,
+    "fields": {
+      "property": 1,
+      "start_date": "2024-07-01",
+      "end_date": "2024-07-07",
+      "guest_name": "Marie Dupont",
+      "guest_email": "marie.dupont@email.com"
+    }
+  },
+  {
+    "model": "logyapp.reservation",
+    "pk": 2,
+    "fields": {
+      "property": 2,
+      "start_date": "2024-08-15",
+      "end_date": "2024-08-22",
+      "guest_name": "Pierre Martin",
+      "guest_email": "pierre.martin@email.com"
+    }
+  },
+  {
+    "model": "logyapp.maintenancetask",
+    "pk": 1,
+    "fields": {
+      "property": 1,
+      "task_type": "cleaning",
+      "description": "Nettoyage complet après le départ des invités",
+      "due_date": "2024-07-07",
+      "completed": false
+    }
+  },
+  {
+    "model": "logyapp.maintenancetask",
+    "pk": 2,
+    "fields": {
+      "property": 2,
+      "task_type": "repair",
+      "description": "Réparer le robinet de la cuisine qui fuit",
+      "due_date": "2024-08-10",
+      "completed": false
+    }
+  },
+  {
+    "model": "logyapp.emergency",
+    "pk": 1,
+    "fields": {
+      "property": 1,
+      "description": "Panne de climatisation",
+      "reported_at": "2024-07-03T14:30:00Z",
+      "resolved_at": null
+    }
+  },
+  {
+    "model": "logyapp.pricingrule",
+    "pk": 1,
+    "fields": {
+      "property": 1,
+      "start_date": "2024-07-01",
+      "end_date": "2024-08-31",
+      "price_per_night": "150.00"
+    }
+  },
+  {
+    "model": "logyapp.pricingrule",
+    "pk": 2,
+    "fields": {
+      "property": 2,
+      "start_date": "2024-08-01",
+      "end_date": "2024-08-31",
+      "price_per_night": "250.00"
+    }
+  },
+  {
+    "model": "logyapp.report",
+    "pk": 1,
+    "fields": {
+      "property": 1,
+      "month": "2024-07-01",
+      "occupancy_rate": 0.85,
+      "total_revenue": "3150.00",
+      "content": "{\"nights_booked\": 26, \"average_rating\": 4.7}"
+    }
+  },
+  {
+    "model": "logyapp.report",
+    "pk": 2,
+    "fields": {
+      "property": 2,
+      "month": "2024-08-01",
+      "occupancy_rate": 0.90,
+      "total_revenue": "6750.00",
+      "content": "{\"nights_booked\": 28, \"average_rating\": 4.9}"
+    }
+  }
+]

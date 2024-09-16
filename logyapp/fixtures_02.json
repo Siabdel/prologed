@@ -1,0 +1,84 @@
+[
+  {
+    "model": "prologed.locataire",
+    "pk": 1,
+    "fields": {
+      "nom": "Dupont",
+      "prenom": "Jean",
+      "email": "jean.dupont@example.com",
+      "telephone": "0123456789"
+    }
+  },
+  {
+    "model": "prologed.locataire",
+    "pk": 2,
+    "fields": {
+      "nom": "Martin",
+      "prenom": "Sophie",
+      "email": "sophie.martin@example.com",
+      "telephone": "0987654321"
+    }
+  },
+  {
+    "model": "prologed.logement",
+    "pk": 1,
+    "fields": {
+      "adresse": "123 Rue de la Paix, 75001 Paris",
+      "type_logement": "Appartement",
+      "superficie": 50,
+      "loyer": 800
+    }
+  },
+  {
+    "model": "prologed.logement",
+    "pk": 2,
+    "fields": {
+      "adresse": "45 Avenue des Champs-Élysées, 75008 Paris",
+      "type_logement": "Studio",
+      "superficie": 30,
+      "loyer": 600
+    }
+  },
+  {
+    "model": "prologed.contrat",
+    "pk": 1,
+    "fields": {
+      "locataire": 1,
+      "logement": 1,
+      "date_debut": "2024-01-01",
+      "date_fin": "2024-12-31",
+      "loyer_mensuel": 800
+    }
+  },
+  {
+    "model": "prologed.contrat",
+    "pk": 2,
+    "fields": {
+      "locataire": 2,
+      "logement": 2,
+      "date_debut": "2024-02-01",
+      "date_fin": "2025-01-31",
+      "loyer_mensuel": 600
+    }
+  },
+  {
+    "model": "prologed.paiement",
+    "pk": 1,
+    "fields": {
+      "contrat": 1,
+      "date_paiement": "2024-02-01",
+      "montant": 800,
+      "methode_paiement": "Virement"
+    }
+  },
+  {
+    "model": "prologed.paiement",
+    "pk": 2,
+    "fields": {
+      "contrat": 2,
+      "date_paiement": "2024-03-01",
+      "montant": 600,
+      "methode_paiement": "Chèque"
+    }
+  }
+]

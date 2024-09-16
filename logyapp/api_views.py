@@ -2,6 +2,9 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Property, Listing, Reservation, MaintenanceTask, Emergency, PricingRule, Report
 from .serializers import PropertySerializer, ListingSerializer, ReservationSerializer, MaintenanceTaskSerializer, EmergencySerializer, PricingRuleSerializer, ReportSerializer
+# Additional custom views for specific business logic
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all()
@@ -31,9 +34,6 @@ class ReportViewSet(viewsets.ModelViewSet):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
 
-# Additional custom views for specific business logic
-from rest_framework.views import APIView
-from rest_framework.response import Response
 
 class OptimizePricingView(APIView):
     def post(self, request, property_id):
