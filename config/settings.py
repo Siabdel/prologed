@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'rest_framework', # new
     'rest_framework.authtoken',
     "dj_rest_auth",
+    # generateur doc DRF
+     'drf_yasg',
     # debug tools
     'debug_toolbar', # new
     'corsheaders', 
