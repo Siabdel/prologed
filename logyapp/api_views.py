@@ -1,38 +1,38 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Property, Listing, Reservation, MaintenanceTask, Emergency, PricingRule, Report
-from .serializers import PropertySerializer, ListingSerializer, ReservationSerializer, MaintenanceTaskSerializer, EmergencySerializer, PricingRuleSerializer, ReportSerializer
 # Additional custom views for specific business logic
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from logyapp import models as cg_models
+from logyapp import serializes as cg_serializers
 
 class PropertyViewSet(viewsets.ModelViewSet):
-    queryset = Property.objects.all()
-    serializer_class = PropertySerializer
+    queryset = cg_models.Property.objects.all()
+    serializer_class = cg_serializers.PropertySerializer
 
 class ListingViewSet(viewsets.ModelViewSet):
-    queryset = Listing.objects.all()
-    serializer_class = ListingSerializer
+    queryset = cg_models.Listing.objects.all()
+    serializer_class = cg_serializers.ListingSerializer
 
 class ReservationViewSet(viewsets.ModelViewSet):
-    queryset = Reservation.objects.all()
-    serializer_class = ReservationSerializer
+    queryset = cg_models.Reservation.objects.all()
+    serializer_class = cg_serializers.ReservationSerializer
 
 class MaintenanceTaskViewSet(viewsets.ModelViewSet):
-    queryset = MaintenanceTask.objects.all()
-    serializer_class = MaintenanceTaskSerializer
+    queryset = cg_models.MaintenanceTask.objects.all()
+    serializer_class = cg_serializers.MaintenanceTaskSerializer
 
 class EmergencyViewSet(viewsets.ModelViewSet):
-    queryset = Emergency.objects.all()
-    serializer_class = EmergencySerializer
+    queryset = cg_models.Emergency.objects.all()
+    serializer_class = cg_serializers.EmergencySerializer
 
 class PricingRuleViewSet(viewsets.ModelViewSet):
-    queryset = PricingRule.objects.all()
-    serializer_class = PricingRuleSerializer
+    queryset = cg_models.PricingRule.objects.all()
+    serializer_class = cg_serializers.PricingRuleSerializer
 
 class ReportViewSet(viewsets.ModelViewSet):
-    queryset = Report.objects.all()
-    serializer_class = ReportSerializer
+    queryset = cg_models.Report.objects.all()
+    serializer_class = cg_serializers.ReportSerializer
 
 
 class OptimizePricingView(APIView):

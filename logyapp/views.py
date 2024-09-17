@@ -1,50 +1,18 @@
-from django.shortcuts import render
-from rest_framework import viewsets
-from .models import Property, Listing, Reservation, MaintenanceTask, Emergency, PricingRule, Report
-from .serializers import PropertySerializer, ListingSerializer, ReservationSerializer, MaintenanceTaskSerializer, EmergencySerializer, PricingRuleSerializer, ReportSerializer
+from django.shortcuts import render, get_object_or_404
+from .models import Property, Reservation, Availability
 
-class PropertyViewSet(viewsets.ModelViewSet):
-    queryset = Property.objects.all()
-    serializer_class = PropertySerializer
+def property_list(request):
+    properties = Property.objects.all()
+    return render(request, 'property_list.html', {'properties': properties})
 
-class ListingViewSet(viewsets.ModelViewSet):
-    queryset = Listing.objects.all()
-    serializer_class = ListingSerializer
+def property_detail(request, pk):
+    property = get_object_or_404(Property, pk=pk)
+    availabilities = property.availabilities.filter(is_available=True)
+    return render(request, 'property_detail.html', {'property': property, 'availabilities': availabilities})
 
-class ReservationViewSet(viewsets.ModelViewSet):
-    queryset = Reservation.objects.all()
-    serializer_class = ReservationSerializer
-
-class MaintenanceTaskViewSet(viewsets.ModelViewSet):
-    queryset = MaintenanceTask.objects.all()
-    serializer_class = MaintenanceTaskSerializer
-
-class EmergencyViewSet(viewsets.ModelViewSet):
-    queryset = Emergency.objects.all()
-    serializer_class = EmergencySerializer
-
-class PricingRuleViewSet(viewsets.ModelViewSet):
-    queryset = PricingRule.objects.all()
-    serializer_class = PricingRuleSerializer
-
-class ReportViewSet(viewsets.ModelViewSet):
-    queryset = Report.objects.all()
-    serializer_class = ReportSerializer
-
-# Additional custom views for specific business logic
-from rest_framework.views import APIView
-from rest_framework.response import Response
-
-class OptimizePricingView(APIView):
-    def post(self, request, property_id):
-        # Logic to optimize pricing based on occupancy and market data
-        # This would involve complex calculations and possibly external API calls
-        return Response({"message": "Pricing optimized successfully"})
-
-class GenerateMonthlyReportView(APIView):
-    def get(self, request, property_id, year, month):
-        # Logic to generate and return a monthly report
-        # This would aggregate data from various models
-        return Response({"report": "Monthly report data"})
-
-
+def reservation_create(request, property_id):
+    property = get_object_or_404(Property, pk=property_id)
+    if request.method == 'POST':
+        # Logique de création de réservation
+        pass
+    return render(request, 'reservation_create.html', {'property': property})

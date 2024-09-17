@@ -1,65 +1,80 @@
 [
   {
     "model": "logyapp.property",
-    "pk": 1,
+    "pk": 3,
     "fields": {
-      "name": "Appartement Vue sur Mer",
-      "type": "Appartement",
-      "address": "123 Rue de la Plage, 06000 Nice",
-      "owner": 1
+      "name": "Sunny Beach Villa",
+      "type": "villa",
+      "address": "123 Seaside Avenue, Beach City, 90210",
+      "owner": 1,
+      "price_per_night": "250.00"
     }
   },
   {
     "model": "logyapp.property",
+    "pk": 4,
+    "fields": {
+      "name": "Downtown Loft",
+      "type": "apartment",
+      "address": "456 Main Street, Metropolis, 10001",
+      "owner": 1,
+      "price_per_night": "150.00"
+    }
+  },
+  {
+    "model": "logyapp.listing",
+    "pk": 1,
+    "fields": {
+      "property": 3,
+      "platform": "airbnb",
+      "listing_url": "https://www.airbnb.com/rooms/12345",
+      "is_active": true
+    }
+  },
+  {
+    "model": "logyapp.listing",
     "pk": 2,
     "fields": {
-      "name": "Villa Provençale",
-      "type": "Maison",
-      "address": "45 Chemin des Oliviers, 13100 Aix-en-Provence",
-      "owner": 1
+      "property": 4,
+      "platform": "booking",
+      "listing_url": "https://www.booking.com/hotel/us/downtown-loft.html",
+      "is_active": true
     }
   },
   {
     "model": "logyapp.reservation",
     "pk": 1,
     "fields": {
-      "property": 1,
-      "start_date": "2024-07-01",
-      "end_date": "2024-07-07",
-      "guest_name": "Marie Dupont",
-      "guest_email": "marie.dupont@email.com"
-    }
-  },
-  {
-    "model": "logyapp.reservation",
-    "pk": 2,
-    "fields": {
-      "property": 2,
-      "start_date": "2024-08-15",
-      "end_date": "2024-08-22",
-      "guest_name": "Pierre Martin",
-      "guest_email": "pierre.martin@email.com"
+      "property": 3,
+      "start_date": "2023-07-01",
+      "end_date": "2023-07-07",
+      "guest_name": "John Doe",
+      "guest_email": "john.doe@example.com",
+      "platform": "airbnb",
+      "reservation_status": "confirmed",
+      "number_of_guests": 4,
+      "total_price": "1750.00",
+      "cleaning_fee": "100.00",
+      "service_fee": "50.00",
+      "guest_phone": "+1234567890",
+      "special_requests": "Late check-in requested",
+      "check_in_time": "16:00:00",
+      "check_out_time": "11:00:00",
+      "is_business_trip": false,
+      "guest_rating": null,
+      "cancellation_policy": "Moderate",
+      "booking_date": "2023-05-15T10:30:00Z"
     }
   },
   {
     "model": "logyapp.maintenancetask",
     "pk": 1,
     "fields": {
-      "property": 1,
-      "task_type": "cleaning",
-      "description": "Nettoyage complet après le départ des invités",
-      "due_date": "2024-07-07",
-      "completed": false
-    }
-  },
-  {
-    "model": "logyapp.maintenancetask",
-    "pk": 2,
-    "fields": {
-      "property": 2,
-      "task_type": "repair",
-      "description": "Réparer le robinet de la cuisine qui fuit",
-      "due_date": "2024-08-10",
+      "property": 3,
+      "maintenance_type": "cleaning",
+      "description": "Deep clean after guest checkout",
+      "due_date": "2023-07-07T14:00:00Z",
+      "status": "pending",
       "completed": false
     }
   },
@@ -67,9 +82,9 @@
     "model": "logyapp.emergency",
     "pk": 1,
     "fields": {
-      "property": 1,
-      "description": "Panne de climatisation",
-      "reported_at": "2024-07-03T14:30:00Z",
+      "property": 4,
+      "description": "Water leak in bathroom",
+      "reported_at": "2023-06-20T08:30:00Z",
       "resolved_at": null
     }
   },
@@ -77,42 +92,106 @@
     "model": "logyapp.pricingrule",
     "pk": 1,
     "fields": {
-      "property": 1,
-      "start_date": "2024-07-01",
-      "end_date": "2024-08-31",
-      "price_per_night": "150.00"
-    }
-  },
-  {
-    "model": "logyapp.pricingrule",
-    "pk": 2,
-    "fields": {
-      "property": 2,
-      "start_date": "2024-08-01",
-      "end_date": "2024-08-31",
-      "price_per_night": "250.00"
+      "property": 3,
+      "start_date": "2023-07-01",
+      "end_date": "2023-08-31",
+      "price_per_night": "300.00"
     }
   },
   {
     "model": "logyapp.report",
     "pk": 1,
     "fields": {
-      "property": 1,
-      "month": "2024-07-01",
+      "property": 3,
+      "month": "2023-06-01",
       "occupancy_rate": 0.85,
-      "total_revenue": "3150.00",
-      "content": "{\"nights_booked\": 26, \"average_rating\": 4.7}"
+      "total_revenue": "7500.00",
+      "content": "{\"bookings\": 10, \"avg_stay\": 5, \"top_platform\": \"Airbnb\"}"
     }
   },
   {
-    "model": "logyapp.report",
+    "model": "logyapp.contract",
+    "pk": 1,
+    "fields": {
+      "property": 3,
+      "start_date": "2023-01-01",
+      "end_date": "2023-12-31",
+      "commission_rate": "15.00",
+      "terms": "Standard contract terms for property management"
+    }
+  },
+  {
+    "model": "logyapp.employee",
+    "pk": 1,
+    "fields": {
+      "user": 2,
+      "role": "cleaner",
+      "phone_number": "+1987654321",
+      "hire_date": "2023-01-15",
+      "is_active": true
+    }
+  },
+  {
+    "model": "logyapp.availability",
+    "pk": 1,
+    "fields": {
+      "property": 3,
+      "start_date": "2023-08-01",
+      "end_date": "2023-08-15",
+      "is_available": true
+    }
+  },
+  {
+    "model": "logyapp.schedule",
     "pk": 2,
     "fields": {
-      "property": 2,
-      "month": "2024-08-01",
-      "occupancy_rate": 0.90,
-      "total_revenue": "6750.00",
-      "content": "{\"nights_booked\": 28, \"average_rating\": 4.9}"
+      "employee": 1,
+      "date": "2023-07-07",
+      "start_time": "09:00:00",
+      "end_time": "17:00:00"
+    }
+  },
+  {
+    "model": "logyapp.servicetask",
+    "pk": 1,
+    "fields": {
+      "property": 3,
+      "service_type": "check_in",
+      "description": "Welcome guest and provide keys",
+      "due_date": "2023-07-01T15:00:00Z",
+      "status": "completed",
+      "completed": true
+    }
+  },
+  {
+    "model": "logyapp.employeereview",
+    "pk": 1,
+    "fields": {
+      "employee": 1,
+      "reviewer": 1,
+      "rating": 5,
+      "comment": "Excellent work, very thorough cleaning",
+      "review_date": "2023-07-08"
+    }
+  },
+  {
+    "model": "logyapp.payment",
+    "pk": 1,
+    "fields": {
+      "reservation": 1,
+      "amount": "1750.00",
+      "payment_date": "2023-06-01T12:00:00Z",
+      "is_refund": false
+    }
+  },
+  {
+    "model": "logyapp.review",
+    "pk": 1,
+    "fields": {
+      "reservation": 1,
+      "rating": 5,
+      "comment": "Beautiful property, excellent service!",
+      "created_at": "2023-07-08T10:00:00Z"
     }
   }
 ]

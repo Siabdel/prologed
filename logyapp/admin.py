@@ -2,28 +2,20 @@
 from django.contrib import admin
 from django.db.models import Count, Sum
 from django.utils.html import format_html
-from .models import Property, Listing, Reservation, MaintenanceTask, Emergency, PricingRule, Report
+from logyapp import models as cg_models
 
-@admin.register(Listing)
+@admin.register(cg_models.Listing)
 class ListingAdmin(admin.ModelAdmin):
     list_display = ('property', 'platform', 'is_active')
     list_filter = ('platform', 'is_active')
 
-@admin.register(MaintenanceTask)
+@admin.register(cg_models.MaintenanceTask)
 class MaintenanceTaskAdmin(admin.ModelAdmin):
-    list_display = ('property', 'task_type', 'due_date', 'completed')
-    list_filter = ('task_type', 'completed')
+    list_display = ('property', 'maintenance_type', 'due_date', 'completed')
+    list_filter = ('maintenance_type', 'completed')
 
-@admin.register(Emergency)
-class EmergencyAdmin(admin.ModelAdmin):
-    list_display = ('property', 'reported_at', 'resolved_at')
 
-@admin.register(PricingRule)
-class PricingRuleAdmin(admin.ModelAdmin):
-    list_display = ('property', 'start_date', 'end_date', 'price_per_night')
-
-  
-@admin.register(Reservation)
+@admin.register(cg_models.Reservation)
 class ReservationAdmin(admin.ModelAdmin):
     list_display = ('property', 'guest_name', 'start_date', 'end_date', 'reservation_status', 'total_price')
     list_filter = ('reservation_status', 'property', 'start_date')
@@ -55,7 +47,7 @@ class ReservationAdmin(admin.ModelAdmin):
 
         return response
 
-@admin.register(Property)
+@admin.register(cg_models.Property)
 class PropertyAdmin(admin.ModelAdmin):
     list_display = ('name', 'type', 'address', 'owner', 'reservation_count', 'total_revenue')
     list_filter = ('type', 'owner')
@@ -80,27 +72,51 @@ class PropertyAdmin(admin.ModelAdmin):
     #
     total_revenue.short_description = 'Revenu Total'
 
-@admin.register(Report)
+@admin.register(cg_models.Emergency)
+class EmergencyAdmin(admin.ModelAdmin):
+    list_display = ('property', 'reported_at', 'resolved_at')
+    list_filter = ('resolved_at',)
+
+@admin.register(cg_models.PricingRule)
+class PricingRuleAdmin(admin.ModelAdmin):
+    list_display = ('property', 'start_date', 'end_date', 'price_per_night')
+
+@admin.register(cg_models.Report)
 class ReportAdmin(admin.ModelAdmin):
     list_display = ('property', 'month', 'occupancy_rate', 'total_revenue')
-    list_filter = ('property', 'month')
-    date_hierarchy = 'month'
 
-    def changelist_view(self, request, extra_context=None):
-        response = super().changelist_view(request, extra_context=extra_context)
-        
-        try:
-            qs = response.context_data['cl'].queryset
-        except (AttributeError, KeyError):
-            return response
+@admin.register(cg_models.Contract)
+class ContractAdmin(admin.ModelAdmin):
+    list_display = ('property', 'start_date', 'end_date', 'commission_rate')
 
-        metrics = {
-            'total_revenue': Sum('total_revenue'),
-            'avg_occupancy': Avg('occupancy_rate'),
-        }
+@admin.register(cg_models.Employee)
+class EmployeeAdmin(admin.ModelAdmin):
+    list_display = ('user', 'role', 'is_active')
+    list_filter = ('role', 'is_active')
 
-        response.context_data['summary'] = list(
-            qs.values('property__name').annotate(**metrics).order_by('-total_revenue')
-        )
+@admin.register(cg_models.Availability)
+class AvailabilityAdmin(admin.ModelAdmin):
+    list_display = ('property', 'start_date', 'end_date', 'is_available')
+    list_filter = ('is_available',)
 
-        return response
+@admin.register(cg_models.Schedule)
+class ScheduleAdmin(admin.ModelAdmin):
+    list_display = ('employee', 'date', 'start_time', 'end_time')
+
+@admin.register(cg_models.ServiceTask)
+class ServiceTaskAdmin(admin.ModelAdmin):
+    list_display = ('property', 'service_type', 'due_date', 'completed')
+    list_filter = ('service_type', 'completed')
+
+@admin.register(cg_models.EmployeeReview)
+class EmployeeReviewAdmin(admin.ModelAdmin):
+    list_display = ('employee', 'reviewer', 'rating', 'review_date')
+
+@admin.register(cg_models.Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ('reservation', 'amount', 'payment_date', 'is_refund')
+    list_filter = ('is_refund',)
+
+@admin.register(cg_models.Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('reservation', 'rating', 'created_at')
