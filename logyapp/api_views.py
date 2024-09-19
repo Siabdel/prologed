@@ -14,6 +14,21 @@ class ListingViewSet(viewsets.ModelViewSet):
     queryset = cg_models.Listing.objects.all()
     serializer_class = cg_serializers.ListingSerializer
 
+# class baser cet foici sur la class ViewSet et pas la class ModelViewSet
+class CustomReservationViewSet(viewsets.ViewSet):
+    queryset = cg_models.Reservation.objects.all()  # Ajoutez cette ligne
+
+    def list(self, request):
+        reservations = cg_models.Reservation.objects.all()
+        calendar_data = {
+            'id': 'maintenances',
+            'name': 'My Calendar',
+            'theme': {},  # Vous pouvez ajouter des configurations de thème ici
+            'schedules': reservations
+        }
+        serializer = cg_serializers.CalendarSerializer(calendar_data)
+        return Response([serializer.data])
+
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset = cg_models.Reservation.objects.all()
     serializer_class = cg_serializers.ReservationSerializer

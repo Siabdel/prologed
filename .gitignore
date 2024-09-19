@@ -1,6 +1,7 @@
 # mypy
 .mypy_cache/
 __pycache__/
+*.pyc
 
 # Other unwanted stuff
 .idea
@@ -146,6 +147,8 @@ venv.bak/
 
 # mkdocs documentation
 /site
+# node lib
+node_modules/
 
 # mypy
 .mypy_cache/
