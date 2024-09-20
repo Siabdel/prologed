@@ -5,6 +5,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from logyapp import models as cg_models
 from logyapp import serializes as cg_serializers
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class PropertyViewSet(viewsets.ModelViewSet):
     queryset = cg_models.Property.objects.all()
@@ -32,6 +36,16 @@ class CustomReservationViewSet(viewsets.ViewSet):
 class ReservationViewSet(viewsets.ModelViewSet):
     queryset = cg_models.Reservation.objects.all()
     serializer_class = cg_serializers.ReservationSerializer
+    
+    def update(self, request, *args, **kwargs):
+        logger.debug(f"Received update data: {request.data}")
+        ##
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
 class MaintenanceTaskViewSet(viewsets.ModelViewSet):
     queryset = cg_models.MaintenanceTask.objects.all()

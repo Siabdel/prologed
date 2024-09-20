@@ -22,6 +22,7 @@ class ReservationAdmin(admin.ModelAdmin):
     search_fields = ('guest_name', 'guest_email', 'property__name')
     date_hierarchy = 'start_date'
 
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.is_superuser:

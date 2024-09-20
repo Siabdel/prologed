@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from logyapp import models as cg_models
+from django.utils import timezone
 
 class ListingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -68,34 +69,69 @@ class ReviewSerializer(serializers.ModelSerializer):
 
         
 class ReservationSerializer(serializers.ModelSerializer):
-    id = serializers.CharField(source='pk')
+    ##id = serializers.CharField(source='pk')
     title = serializers.SerializerMethodField()
+    #start = serializers.DateTimeField(source='start_date')
+    #end = serializers.DateTimeField(source='end_date')
+
     start = serializers.SerializerMethodField()  
     end = serializers.SerializerMethodField()
-    bgColor = serializers.CharField(default='#00a9ff')
-    color = serializers.CharField(default='white')
+    ## bgColor = serializers.CharField(default='#00a9ff')
+    ## color = serializers.CharField(default='white')
     
     def get_start(self, obj):
-        if obj.check_in_time:
-            return f"{obj.start_date}T{obj.check_in_time.isoformat()}"
         return obj.start_date.isoformat()
 
     def get_end(self, obj):
-        if obj.check_out_time:
-            return f"{obj.end_date}T{obj.check_out_time.isoformat()}"
-        #
         return obj.end_date.isoformat()
-
 
     def get_title(self, obj):
         return f"Reservation for {obj.property.name}"
 
+    def update(self, instance, validated_data):
+        instance.start_date = validated_data.get('start_date', instance.start_date)
+        instance.end_date = validated_data.get('end_date', instance.end_date)
+        instance.guest_name = validated_data.get('guest_name', instance.guest_name)
+        # Mettez à jour d'autres champs si nécessaire
+        instance.save()
+        return instance
+    
+    def to_internal_value(self, data):
+        # Si vous avez besoin de faire une validation ou une transformation spécifique
+        if 'start_date' in data and isinstance(data['start_date'], str):
+            try:
+                data['start_date'] = timezone.datetime.fromisoformat(data['start_date'])
+            except ValueError:
+                raise serializers.ValidationError({"start_date": "Invalid date format. Use ISO format."})
+
+        if 'end_date' in data and isinstance(data['end_date'], str):
+            try:
+                data['end_date'] = timezone.datetime.fromisoformat(data['end_date'])
+            except ValueError:
+                raise serializers.ValidationError({"end_date": "Invalid date format. Use ISO format."})
+
+        return super().to_internal_value(data)
+
+    def validate(self, data):
+        if data['start_date'] >= data['end_date']:
+            raise serializers.ValidationError("End date must be after start date")
+        return data
+
+ 
     class Meta:
         model = cg_models.Reservation
-        fields = ['id', 'title', 'start', 'end', 'guest_name', 'guest_email', 
+        fields = [ 'id', 'title', 'start', 'end', 'guest_name', 'guest_email', 
+                  'start_date', 'end_date', 'property',  
                   'reservation_status', 'number_of_guests', 'total_price',
-                  'bgColor', 'color', 
                   ]
+        extra_kwargs = {
+            'property': {'required': False}  # Rend le champ 'property' optionnel pour les mises à jour
+        }
+        
+        def validate(self, data):
+            if data['start_date'] >= data['end_date']:
+                raise serializers.ValidationError("End date must be after start date")
+            return data
 
 class PropertySerializer(serializers.ModelSerializer):
     schedules = ReservationSerializer(source='reservations', many=True)

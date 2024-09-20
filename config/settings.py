@@ -198,11 +198,29 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     "http://localhost:8000",
+    "http://localhost:5173",
 ] # If this is used, then not need to use `CORS_ORIGIN_ALLOW_ALL = True`
 CORS_ORIGIN_REGEX_WHITELIST = [
     'http://localhost:3000',
     'http://localhost:8080',
+    "http://localhost:5173",
 ]
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_URL = "/accounts/login/"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            ##'level': 'DEBUG',
+        },
+    },
+}

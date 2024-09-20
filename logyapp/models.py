@@ -58,8 +58,8 @@ class Reservation(models.Model):
 
     property = models.ForeignKey(Property, on_delete=models.CASCADE, 
                                             related_name='reservations')
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
     guest_name = models.CharField(max_length=100)
     guest_email = models.EmailField()
     
@@ -74,18 +74,13 @@ class Reservation(models.Model):
     service_fee = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     guest_phone = models.CharField(max_length=20, blank=True)
     special_requests = models.TextField(blank=True)
-    check_in_time = models.TimeField(null=True, blank=True)
-    check_out_time = models.TimeField(null=True, blank=True)
     is_business_trip = models.BooleanField(default=False)
     guest_rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=True, blank=True)
     cancellation_policy = models.CharField(max_length=100, blank=True)
     booking_date = models.DateTimeField(auto_now_add=True)
     
-    def __str__(self):
-        return f"{self.guest_name} - {self.property.name} ({self.start_date} to {self.end_date})"
-
     def get_duration(self):
-        return (self.end_date - self.start_date).days
+        return (self.end_date - self.start_date).days + 1
 
     def calculate_total_price(self):
         duration = self.get_duration()
@@ -96,7 +91,8 @@ class Reservation(models.Model):
             self.total_price = self.calculate_total_price()
         super().save(*args, **kwargs)
 
-
+    def __str__(self):
+        return f"Reservation for {self.property} from {self.start_date} to {self.end_date}"
 
 class Emergency(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='emergencies')
