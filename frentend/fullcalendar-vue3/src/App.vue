@@ -59,11 +59,8 @@ export default defineComponent({
         eventsSet: this.handleEvents,
         eventChange: this.handleEventChange, 
         eventRemove: this.handleEventRemove,
-        /* you can update a remote database when these fire:
-        eventAdd:
-        eventChange:
-        eventRemove:
-        */
+        eventDidMount: this.handleEventDidMount,
+        events: this.fetchEvents,
       },
       currentEvents: [],
     } 
@@ -106,11 +103,30 @@ export default defineComponent({
       selectInfo.view.calendar.unselect()
     },
 
-    handleEventClick(clickInfo) {
-      if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-        clickInfo.event.remove()
+  handleEventClick(clickInfo) {
+      if (confirm(`Are you sure you want to Update the event '${clickInfo.event.title}'`)) {
+        this.openAdminEdit(clickInfo.event.id)
       }
     },
+  
+  openAdminEdit(eventId) {
+    const adminUrl = `${process.env.VITE_API_BASE_URL}/admin/logyapp/reservation/${eventId}/change/`
+    const link = document.createElement('a')
+    link.href = adminUrl
+    link.target = '_blank'
+    link.rel = 'noopener noreferrer'
+    document.body.appendChild(link)
+    link.click()
+    //document.location = adminUrl
+    //document.body.removeChild(link)
+    window.location.href = '/' + adminUrl
+  },
+ 
+  //
+  fetchEvents(fetchInfo, successCallback, failureCallback) {
+    // Votre logique de récupération d'événements...
+  },
+ 
     handleEvents(events) {
       this.currentEvents = events
     },
