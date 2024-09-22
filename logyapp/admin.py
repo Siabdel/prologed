@@ -3,6 +3,10 @@ from django.contrib import admin
 from django.db.models import Count, Sum
 from django.utils.html import format_html
 from logyapp import models as cg_models
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
+from import_export import resources, fields, widgets
+
 
 @admin.register(cg_models.Listing)
 class ListingAdmin(admin.ModelAdmin):
@@ -14,15 +18,34 @@ class MaintenanceTaskAdmin(admin.ModelAdmin):
     list_display = ('property', 'maintenance_type', 'due_date', 'completed')
     list_filter = ('maintenance_type', 'completed')
 
+class ReservationResource(resources.ModelResource):
+    property_name = fields.Field(column_name='property_name', 
+                                 attribute='property', 
+                                 widget=widgets.ForeignKeyWidget(cg_models.Property, 'name'))
+    class Meta:
+        model = cg_models.Reservation
+        fields = ('id', 'property', 'start_date', 'end_date', 'guest_name', 'guest_email', 'number_of_guests', 'total_price')
+        export_order = fields
+   
+        
+    def before_import_row(self, row, **kwargs):
+        # Logique personnalisée avant l'import de chaque ligne
+        pass
+
+    def after_import_row(self, row, row_result, **kwargs):
+        # Logique personnalisée après l'import de chaque ligne
+        pass
 
 @admin.register(cg_models.Reservation)
-class ReservationAdmin(admin.ModelAdmin):
+class ReservationAdmin(ImportExportModelAdmin):
+    resource_class = ReservationResource
+
+    
     list_display = ('property', 'guest_name', 'start_date', 'end_date', 'reservation_status', 'total_price')
     list_filter = ('reservation_status', 'property', 'start_date')
     search_fields = ('guest_name', 'guest_email', 'property__name')
     date_hierarchy = 'start_date'
-
-
+   
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
