@@ -6,6 +6,11 @@ from rest_framework.response import Response
 from logyapp import models as cg_models
 from logyapp import serializes as cg_serializers
 import logging
+from django.db.models import Q
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import Reservation, Property, Employee, Task, ServiceTask
+
 
 logger = logging.getLogger(__name__)
 
@@ -75,5 +80,40 @@ class GenerateMonthlyReportView(APIView):
         # Logic to generate and return a monthly report
         # This would aggregate data from various models
         return Response({"report": "Monthly report data"})
+## report specifique 
+class ReservationCalendarView(APIView):
+    def get(self, request):
+        property_id = request.query_params.get('property_id')
+        city = request.query_params.get('city')
+        
+        reservations = Reservation.objects.all()
+        if property_id:
+            reservations = reservations.filter(property_id=property_id)
+        if city:
+            reservations = reservations.filter(property__city=city)
+        
+        serializer = cg_serializers.ReservationSerializer(reservations, many=True)
+        return Response(serializer.data)
 
+class EmployeeTaskCalendarView(APIView):
+    def get(self, request):
+        employee_id = request.query_params.get('employee_id')
+        
+        maintenance_tasks = cg_models.MaintenanceTask.objects.all()
+        service_tasks = ServiceTask.objects.all()
+        
+        if employee_id:
+            maintenance_tasks = maintenance_tasks.filter(employee_id=employee_id)
+            service_tasks = service_tasks.filter(employee_id=employee_id)
+        
+        all_tasks = list(maintenance_tasks) + list(service_tasks)
+        serializer = cg_serializers.EmployeeTaskSerializer(all_tasks, many=True)
+        return Response(serializer.data)
 
+# views.py
+ 
+class ServiceTaskCalendarView(APIView):
+    def get(self, request):
+        service_tasks = ServiceTask.objects.all()
+        serializer = cg_serializers.ServiceTaskSerializer(service_tasks, many=True)
+        return Response(serializer.data)

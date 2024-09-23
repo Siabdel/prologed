@@ -145,3 +145,43 @@ class CalendarSerializer(serializers.Serializer):
     name = serializers.CharField(default='My Calendar')
     theme = serializers.DictField(default={})
     schedules = ReservationSerializer(many=True) 
+
+## 
+class EmployeeTaskSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.SerializerMethodField()
+    start = serializers.DateTimeField(source='due_date')
+    end = serializers.DateTimeField(source='due_date')
+    description = serializers.CharField()
+    status = serializers.CharField()
+    task_type = serializers.SerializerMethodField()
+
+    def get_title(self, obj):
+        if isinstance(obj, cg_models.MaintenanceTask):
+            return f"Maintenance: {obj.get_maintenance_type_display()}"
+        elif isinstance(obj, cg_models.ServiceTask):
+            return f"Service: {obj.get_service_type_display()}"
+        return "Unknown Task"
+
+    def get_task_type(self, obj):
+        if isinstance(obj, cg_models.MaintenanceTask):
+            return "maintenance"
+        elif isinstance(obj, cg_models.ServiceTask):
+            return "service"
+        return "unknown"
+        
+###
+# serializers.py
+class ServiceTaskSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField()
+    start = serializers.DateTimeField(source='due_date')
+    end = serializers.DateTimeField(source='due_date')
+
+    class Meta:
+        model = cg_models.ServiceTask
+        fields = ['id', 'title', 'start', 'end', 'description', 'status', 'service_type']
+
+    def get_title(self, obj):
+        return f"{obj.get_service_type_display()} - {obj.property.name}"
+
+ 
